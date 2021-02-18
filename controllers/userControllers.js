@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler'
 import User from '../models/users.js'
 import generateToken from '../utils/generateToken.js'
+import jwtDecode from 'jwt-decode'
 
 //@desc    Home
 //@routes  /api/users
@@ -21,14 +22,16 @@ const getUsers = asyncHandler(async (req, res) => {
 //@routes GET /api/users/profile
 //@acces  private
 const getOneUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id)
+  const decode = jwtDecode(req.params.id)
+  const user = await User.findById(decode.id)
+  const token = generateToken(user._id)
 
   if (user) {
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
-      isAdmin: user.isAdmin,
+      token: token,
     })
   } else {
     res.status(404)

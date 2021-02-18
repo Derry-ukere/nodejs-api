@@ -8,8 +8,8 @@ import {
 } from '../controllers/userControllers.js'
 
 router.route('/').get(home)
-router.route('/:id').get(getOneUser)
 router.route('/getall').get(getUsers)
+router.route('/:id').get(getOneUser)
 router.route('/add').post(addUser)
 
 export default router
